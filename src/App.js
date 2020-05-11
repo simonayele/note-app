@@ -31,11 +31,13 @@ class App extends Component {
   getNote = (id) => {
     axios.get(urlFor(`notes/${id}`))
     .then((res) => this.setState({ note: res.data, showNote: true }) )
-    .catch((err) =>console.log(err.response.data) );
+    .catch((err) => console.log(err.response.data) );
   }
 
   submitNote = (data) => {
-    console.log(data);
+    axios.post(urlFor('notes'), data)
+    .then((res) => this.setState({ showNote: false }) )
+    .catch((err) => console.log(err.response.data) );
   }
 
    render() {
