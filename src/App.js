@@ -27,18 +27,19 @@ class App extends Component {
     .catch((err) => console.log(err.response.data) );
   }
 
-  render() {
+   render() {
     const { showNote, notes } = this.state;
-    
+
     return (
       <div className="App">
         <Nav toggleNote={this.toggleNote} showNote={showNote} />
-        {showNote ? 
-          <Note /> 
-          : 
-          <List 
+        {showNote ?
+          <Note />
+          :
+          <List
             getNotes={this.getNotes}
-          /> 
+            notes={notes}
+          />
         }
       </div>
     );
