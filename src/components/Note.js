@@ -1,6 +1,7 @@
 import React from 'react';
 
-class Note extends React.Component{
+class Note extends React.Component {
+
   onSubmit(e) {
     e.preventDefault();
     const formData = {
@@ -10,7 +11,7 @@ class Note extends React.Component{
     this.props.submitNote(formData, this.props.note.id);
   }
 
-  onTagSubmit(e){
+  onTagSubmit(e) {
     e.preventDefault();
     const formData = {
       name: this.name.value
@@ -25,13 +26,14 @@ class Note extends React.Component{
         return (
           <span>
             Tag your note:
-            <i className="tag-button material-icons"
+            <i
+              className="tag-button material-icons"  
               onClick={() => this.props.showTagForm()}
             >
               add circle
             </i>
           </span>
-          );
+        );
       } else {
         return (
           <form onSubmit={(e) => this.onTagSubmit(e)}>
@@ -40,26 +42,47 @@ class Note extends React.Component{
               type="text"
               placeholder="Tag Name..."
               ref={(input) => this.name = input}
-            />
+             />
           </form>
         );
       }
     }
   }
 
-  render(){
-    const { note } = this.props;
+  renderTags(note) {
+    if (note.tags) {
+      return note.tags.map((tag, index) =>
+          <div
+            className="tag"
+            key={index}
+            onClick={(e) => this.props.deleteTag(note.id, tag.id)}
+          >
+            <span className="delete">
+              <i className="material-icons">delete</i>
+            </span>
+            {tag.name}
+          </div>
+      );
+    }
+  }
+
+  render() {
+    const { note, closeTagForm } = this.props;
 
     return (
       <div className="note-container">
-        <form className="note-form" onSubmit={(e) => this.onSubmit(e)}>
+        <form 
+          className="note-form" 
+          onSubmit={(e) => this.onSubmit(e)}
+          onClick={() => closeTagForm()}
+          >
           <input
             className="note-title-input"
             type="text"
             placeholder="Note Title..."
-            defaultValue={note.tile}
+            defaultValue={note.title}
             ref={(input) => this.title = input}
-            />
+           />
           <textarea
             className="note-textarea"
             placeholder="Type Here..."
@@ -68,13 +91,16 @@ class Note extends React.Component{
           />
           <input className="note-button" type="submit" value="Submit" />
         </form>
-        <div className="tag-button-container">
+        <div className="tag-container">
           <div className="tag-button-container">
             {this.renderTagForm(note)}
           </div>
+          <div className="tag-list-container">
+            {this.renderTags(note)}
+          </div>
         </div>
       </div>
-      );
+    );
   }
 }
 
